@@ -91,8 +91,10 @@ h1, .brand {
 }
 
 .hero-identity h1 {
-    font-size: clamp(3rem, 7vw, 5rem);
-    line-height: 0.95;
+    max-width: 320px;
+    font-size: 2.2rem;
+    line-height: 1.05;
+    overflow-wrap: normal;
 }
 
 .bio {
@@ -176,20 +178,148 @@ h1, .brand {
     border-top: 1px solid var(--line);
 }
 
+.experiences {
+    padding: 6rem 0;
+    background: var(--paper);
+    color: var(--ink);
+}
+
+.section-heading {
+    margin-bottom: 4rem;
+}
+
+.section-kicker {
+    color: #f28a68;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.experiences h2 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+}
+
+.experience-list {
+    max-width: 780px;
+    border-top: 1px solid var(--line);
+}
+
+.experience-item {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 1.5rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--line);
+    transition: transform 0.25s ease;
+}
+
+.experience-item:hover {
+    transform: translateX(10px);
+}
+
+.experience-marker {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.experience-marker::before {
+    display: none;
+}
+
+.experience-item:last-child .experience-marker::before {
+    display: none;
+}
+
+.experience-marker span {
+    position: relative;
+    z-index: 1;
+    width: 14px;
+    height: 14px;
+    margin-top: 0.3rem;
+    border-radius: 50%;
+    border-color: var(--paper);
+    background-color: var(--accent);
+    box-shadow: 0 0 0 6px var(--paper), 0 0 0 7px var(--accent);
+}
+
+.experience-content h3 {
+    font-size: 1.35rem;
+    line-height: 1.3;
+    margin-bottom: 0.35rem;
+}
+
+.experience-company {
+    color: var(--accent-dark);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.experience-period,
+.experience-location {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.experience-description {
+    max-width: 620px;
+    color: var(--text-muted);
+    margin-top: 1rem;
+}
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 @media (max-width: 600px) {
-    .hero-grid {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "identity"
-            "photo"
-            "details";
+    .container,
+    .hero-grid,
+    .hero-details,
+    .experience-list,
+    .experience-content {
+        min-width: 0;
+        max-width: 100%;
     }
 
     .hero-photo {
-        max-width: 220px;
+        width: min(100%, 250px);
+        margin: 0 auto;
+    }
+
+    .photo-block {
+        width: calc(100% - 1.25rem);
+        height: calc(100% - 1.25rem);
+    }
+
+    .hero-identity h1,
+    .experience-content h3,
+    .experience-description {
+        overflow-wrap: anywhere;
+        word-break: normal;
+    }
+
+    .experience-period,
+    .experience-location {
+        overflow-wrap: anywhere;
     }
 
     .social-links {
-        justify-content: flex-start;
+        width: 100%;
     }
+
+    .social-link {
+        min-width: 0;
+    }
+}
+
+.photo-block {
+    width: calc(100% - 1.25rem);
+    height: calc(100% - 1.25rem);
 }

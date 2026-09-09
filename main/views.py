@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from main.models import Experience
+from main.models import Experience, Skill
 
 
 # Create your views here.
@@ -23,3 +23,10 @@ def show_experience(request):
         "experience_list": Experience.objects.all(),
     }
     return render(request, "experience.html", context)
+
+def show_skill(request):
+    context = {
+        "name": "Keisha Janice Maulina Napitupulu",
+        "skill_list": Skill.objects.all(),
+    }
+    return render(request, "skill.html", context)

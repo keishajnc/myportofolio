@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills</title>
+</head>
+
+<body>
+
+    <nav>
+        <a href="{% url 'main:show_main' %}">Home</a>
+        <a href="{% url 'main:show_experience' %}">Experience</a>
+        <a href="{% url 'main:show_skill' %}">Skills</a>
+    </nav>
+
+    <main>
+        <h1>My Skills</h1>
+
+        {% if skill_list %}
+            {% for skill in skill_list %}
+                <div>
+                    <h2>{{ skill.name }}</h2>
+                    <p>{{ skill.description }}</p>
+                    <p>Level: {{ skill.level }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No skills available yet.</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>© 2026 Keisha Janice Maulina Napitupulu</p>
+    </footer>
+
+</body>
+</html>

@@ -14,6 +14,7 @@ class Experience(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
+    organization = models.CharField(max_length=255, default="")
     description = models.TextField()
     category = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, default='full-time')
     thumbnail = models.URLField(blank=True, null=True)
@@ -27,9 +28,13 @@ class Experience(models.Model):
         return self.ended_at is None
 
 class Skill(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
     name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    description = models.TextField()
     level = models.CharField(max_length=50)
 
     def __str__(self):

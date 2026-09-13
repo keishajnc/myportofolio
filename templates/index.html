@@ -16,6 +16,7 @@
             <nav>
                 <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="{% url 'main:show_experience' %}">Experience</a>
+                <a href="{% url 'main:show_skill' %}">Skills</a>
             </nav>
         </div>
     </header>
@@ -24,7 +25,7 @@
         <section class="hero" id="profile">
             <div class="container hero-grid">
                 <div class="hero-identity">
-                    <p class="hero-kicker">Information System&middot; Universitas Indonesia</p>
+                    <p class="hero-kicker">Information Systems &middot; Universitas Indonesia</p>
                     <h1>{{ name }}</h1>
                 </div>
                 <div class="hero-photo">
@@ -51,62 +52,76 @@
                 </div>
             </div>
         </section>
-        <section class="experiences" id="experiences">
+            <section class="experiences" id="experiences">
+                <div class="container">
+                    <div class="section-heading">
+                        <p class="section-kicker">My Journey</p>
+                        <h2>Experiences</h2>
+                    </div>
+
+                    <div class="experience-list">
+
+                        {% if experience_list %}
+
+                            {% for experience in experience_list %}
+
+                                <article class="experience-item">
+                                    <div class="experience-marker">
+                                        <span></span>
+                                    </div>
+
+                                    <div class="experience-content">
+                                        <h3>{{ experience.title }}</h3>
+
+                                        <p class="experience-company">
+                                            {{ experience.organization }}
+                                        </p>
+
+                                        <p class="experience-description">
+                                            {{ experience.description }}
+                                        </p>
+
+                                        {% if experience.is_ongoing %}
+                                            <p class="experience-period">Ongoing</p>
+                                        {% else %}
+                                            <p class="experience-period">Completed</p>
+                                        {% endif %}
+                                    </div>
+                                </article>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <p>No experiences available yet.</p>
+
+                        {% endif %}
+
+                    </div>
+                </div>
+        </section>
+        <section class="skills" id="skills">
             <div class="container">
                 <div class="section-heading">
-                    <p class="section-kicker">Career journey</p>
-                    <h2>Experiences</h2>
+                    <p class="section-kicker">My Strengths</p>
+                    <h2>Skills</h2>
                 </div>
 
-                <div class="experience-list">
-                    <article class="experience-item">
-                        <div class="experience-marker">
-                            <span></span>
-                        </div>
-
-                        <div class="experience-content">
-                            <h3>Staff of Art and Culture Department</h3>
-                            <p class="experience-company">BEM Fasilkom UI</p>
-                            <p class="experience-period">May 2026 - Present · 5 months</p>
-                            <p class="experience-location">Depok, Jawa Barat</p>
-                            <p class="experience-description">
-                                Served as Vice Head of the WADAW!2026, coordinating team preparation, performers, and communication throughout the competition.
-                            </p>
-                        </div>
-                    </article>
-
-                    <article class="experience-item">
-                        <div class="experience-marker">
-                            <span></span>
-                        </div>
-
-                        <div class="experience-content">
-                            <h3>Human Resources of Liasion Officer</h3>
-                            <p class="experience-company">Open House Fasilkom UI</p>
-                            <p class="experience-period">July 2026 - Present · 3 months</p>
-                            <p class="experience-location">Depok, Jawa Barat</p>
-                            <p class="experience-description">
-                                Supported HR operations and coordinated with committee members to ensure effective communication, staff engagement, and smooth event execution.
-                            </p>
-                        </div>
-                    </article>
-
-                    <article class="experience-item">
-                        <div class="experience-marker">
-                            <span></span>
-                        </div>
-
-                        <div class="experience-content">
-                            <h3>Human Resources of Stage</h3>
-                            <p class="experience-company">COMPFEST 18th</p>
-                            <p class="experience-period"> Mar 2026 - Present · 7 months</p>
-                            <p class="experience-location">Depok, Jawa Barat</p>
-                            <p class="experience-description">
-                                Coordinated stage committee members and supported HR operations to ensure smooth communication and event execution.
-                            </p>
-                        </div>
-                    </article>
-                </div>
+                {% if skill_list %}
+                    <div class="skill-list">
+                        {% for skill in skill_list %}
+                            <article class="skill-item">
+                                <div class="skill-content">
+                                    <h3>{{ skill.name }}</h3>
+                                    <p>{{ skill.description }}</p>
+                                    <p class="skill-level">Level: {{ skill.level }}</p>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No skills available yet.</p>
+                {% endif %}
             </div>
         </section>
     </main>

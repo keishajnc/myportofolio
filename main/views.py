@@ -10,9 +10,11 @@ def show_main(request):
         "npm": "2506551232",
         "study_program": "S1 Sistem Informasi",
         "bio": (
-            "Mahasiswa Sistem Informasi Universitas Indonesia yang tertarik "
-            "pada pengembangan perangkat lunak dan pendidikan."
+             "An Information Systems student at Universitas Indonesia "
+    "interested in software development and education."
         ),
+        "experience_list": Experience.objects.all(),
+        "skill_list": Skill.objects.all(),
     }
     return render(request, "index.html", context)
 

@@ -2,13 +2,13 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from main.models import Experience
+from main.models import Experience, Skill
 # Create your tests here.
 
 class MainTest(TestCase):
     def setUp(self):
         self.experience = Experience.objects.create(
-            title="Public Relations of PMB Fasilkom UI 2026",
+            title="Public Relations Staff",
             description="Supported the public relations team in managing communications, preparing publications and broadcasts, and coordinating information distribution for PMB Fasilkom UI 2026.",
             category="part-time",
         )
@@ -18,7 +18,7 @@ class MainTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "index.html")
-        self.assertNotContains(response, self.experience.title)
+        self.assertContains(response, self.experience.title)
         self.assertContains(
             response,
             f'href="{reverse("main:show_experience")}"'
@@ -32,7 +32,7 @@ class MainTest(TestCase):
     def test_experience_model(self):
         self.assertEqual(
             str(self.experience),
-            "Public Relations of PMB Fasilkom UI 2026"
+            "Public Relations Staff"
         )
         self.assertEqual(self.experience.category, "part-time")
         self.assertTrue(self.experience.is_ongoing)
@@ -43,6 +43,7 @@ class MainTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "experience.html")
         self.assertContains(response, self.experience.title)
+        self.assertContains(response, self.experience.organization)
         self.assertContains(response, self.experience.description)
         self.assertContains(response, "Ongoing")
         self.assertNotContains(response, "Part-Time")
@@ -70,3 +71,32 @@ class MainTest(TestCase):
         self.assertFalse(self.experience.is_ongoing)
         self.assertContains(response, "Completed")
         self.assertNotContains(response, "Ongoing")
+
+class SkillTest(TestCase):
+
+    def test_skill_page_is_accessible(self):
+        response = self.client.get(reverse("main:show_skill"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "skill.html")
+
+    def test_skill_data_appears(self):
+        skill = Skill.objects.create(
+            name="Python",
+            description="Programming language",
+            level="Intermediate",
+        )
+
+        response = self.client.get(reverse("main:show_skill"))
+
+        self.assertContains(response, skill.name)
+        self.assertContains(response, skill.description)
+        self.assertContains(response, skill.level)
+
+    def test_empty_skill_page(self):
+        response = self.client.get(reverse("main:show_skill"))
+
+        self.assertContains(
+            response,
+            "No skills available yet."
+        )

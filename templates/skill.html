@@ -1,37 +1,78 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skills</title>
+
+    <title>{{ name }} - Skills</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
 
-    <nav>
-        <a href="{% url 'main:show_main' %}">Home</a>
-        <a href="{% url 'main:show_experience' %}">Experience</a>
-        <a href="{% url 'main:show_skill' %}">Skills</a>
-    </nav>
+    <header class="site-header">
+        <div class="container">
+            <a href="{% url 'main:show_main' %}" class="brand">
+                {{ name }}
+            </a>
+
+            <nav>
+                <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_experience' %}">Experience</a>
+                <a href="{% url 'main:show_skill' %}">Skills</a>
+            </nav>
+        </div>
+    </header>
 
     <main>
-        <h1>My Skills</h1>
+        <section class="skills">
+            <div class="container">
 
-        {% if skill_list %}
-            {% for skill in skill_list %}
-                <div>
-                    <h2>{{ skill.name }}</h2>
-                    <p>{{ skill.description }}</p>
-                    <p>Level: {{ skill.level }}</p>
+                <div class="section-heading">
+                    <p class="section-kicker">My Strengths</p>
+                    <h2>Skills</h2>
                 </div>
-            {% endfor %}
-        {% else %}
-            <p>No skills available yet.</p>
-        {% endif %}
+
+                {% if skill_list %}
+                    <div class="skill-list">
+
+                        {% for skill in skill_list %}
+                            <article class="skill-item">
+                                <div class="skill-content">
+                                    <h3>{{ skill.name }}</h3>
+
+                                    <p>{{ skill.description }}</p>
+
+                                    <p class="skill-level">
+                                        {{ skill.level }}
+                                    </p>
+                                </div>
+                            </article>
+                        {% endfor %}
+
+                    </div>
+                {% else %}
+                    <p>No skills available yet.</p>
+                {% endif %}
+
+            </div>
+        </section>
     </main>
 
-    <footer>
-        <p>© 2026 Keisha Janice Maulina Napitupulu</p>
+    <footer class="site-footer">
+        <div class="container">
+            <p>
+                &copy; 2026 {{ name }}.
+                Fakultas Ilmu Komputer, Universitas Indonesia.
+            </p>
+        </div>
     </footer>
 
 </body>

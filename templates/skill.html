@@ -10,7 +10,17 @@
 
                 <div class="section-heading">
                     <p class="section-kicker">My Strengths</p>
+                <div class="project-header">
                     <h2>Skills</h2>
+                    <a href="{% url 'main:create_skill' %}" class="button project-add-button">
+                        <span aria-hidden="true">+</span>Tambah Skill
+                    </a>
+                </div>
+
+                <form method="get" action="{% url 'main:show_skill' %}" class="project-search">
+                    <input type="search" name="name" value="{{ name_query }}" placeholder="Cari berdasarkan nama skill" class="project-search__input" aria-label="Cari berdasarkan nama skill">
+                    <button type="submit" class="button">Cari</button>
+                </form>
                 </div>
 
                 {% if skill_list %}
@@ -26,13 +36,18 @@
                                     <p class="skill-level">
                                         {{ skill.level }}
                                     </p>
+                                    {% include "components/skill_delete_modal.html" %}
                                 </div>
                             </article>
                         {% endfor %}
 
                     </div>
                 {% else %}
-                    <p>No skills available yet.</p>
+                    {% if name_query %}
+                        <p class="empty-state">Tidak ada skill dengan nama "{{ name_query }}".</p>
+                    {% else %}
+                        <p>No skills available yet.</p>
+                    {% endif %}
                 {% endif %}
 
             </div>

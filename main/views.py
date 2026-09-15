@@ -106,3 +106,25 @@ def create_skill(request):
         "form": form,
     }
     return render(request, "skill_form.html", context)
+
+
+def delete_experience(request, id):
+    experience = get_object_or_404(Experience, pk=id)
+
+    if request.method == "POST":
+        experience.delete()
+        messages.success(request, "Experience berhasil dihapus!")
+        return redirect("main:show_experience")
+
+    return redirect("main:show_experience")
+
+
+def delete_skill(request, id):
+    skill = get_object_or_404(Skill, pk=id)
+
+    if request.method == "POST":
+        skill.delete()
+        messages.success(request, "Skill berhasil dihapus!")
+        return redirect("main:show_skill")
+
+    return redirect("main:show_skill")

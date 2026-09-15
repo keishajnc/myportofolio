@@ -8,7 +8,17 @@
         <section class="experience-section" id="experience">
             <div class="container">
                 <p class="section-kicker">My Journey</p>
-                <h1>Experience</h1>
+                <div class="project-header">
+                    <h1>Experience</h1>
+                    <a href="{% url 'main:create_experience' %}" class="button project-add-button">
+                        <span aria-hidden="true">+</span>Tambah Experience
+                    </a>
+                </div>
+
+                <form method="get" action="{% url 'main:show_experience' %}" class="project-search">
+                    <input type="search" name="title" value="{{ title_query }}" placeholder="Cari berdasarkan judul experience" class="project-search__input" aria-label="Cari berdasarkan judul experience">
+                    <button type="submit" class="button">Cari</button>
+                </form>
 
                 <div class="experience-grid">
                     {% for experience in experience_list %}
@@ -28,11 +38,14 @@
                             {% else %}
                                 <p class="experience-status">Completed</p>
                             {% endif %}
+                            {% include "components/experience_delete_modal.html" %}
                         </article>
                     {% empty %}
-                        <p class="empty-state">
-                            Belum ada pengalaman yang ditambahkan.
-                        </p>
+                        {% if title_query %}
+                            <p class="empty-state">Tidak ada experience dengan judul "{{ title_query }}".</p>
+                        {% else %}
+                            <p class="empty-state">Belum ada pengalaman yang ditambahkan.</p>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

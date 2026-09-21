@@ -128,3 +128,20 @@ def delete_skill(request, id):
         return redirect("main:show_skill")
 
     return redirect("main:show_skill")
+
+def update_experience(request, id):
+    experience = get_object_or_404(Experience, pk=id)
+    form = ExperienceForm(request.POST or None, instance=experience)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Experience berhasil diperbarui!")
+        return redirect("main:show_experience")
+
+    context = {
+        "name": "Keisha Janice Maulina Napitupulu",
+        "form": form,
+        "is_edit": True,
+    }
+
+    return render(request, "experience_form.html", context)

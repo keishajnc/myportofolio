@@ -12,9 +12,11 @@
                     <p class="section-kicker">My Strengths</p>
                 <div class="project-header">
                     <h2>Skills</h2>
+                    {% if user.is_superuser %}
                     <a href="{% url 'main:create_skill' %}" class="button project-add-button">
                         <span aria-hidden="true">+</span>Tambah Skill
                     </a>
+                    {% endif %}
                 </div>
 
                 <form method="get" action="{% url 'main:show_skill' %}" class="project-search">
@@ -36,7 +38,10 @@
                                     <p class="skill-level">
                                         {{ skill.level }}
                                     </p>
+                                    {% include "components/skill_star.html" with skill=skill %}
+                                    {% if user.is_superuser %}
                                     {% include "components/skill_delete_modal.html" %}
+                                    {% endif %}
                                 </div>
                             </article>
                         {% endfor %}

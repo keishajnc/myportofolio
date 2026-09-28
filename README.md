@@ -39,3 +39,27 @@ Saya menggunakan ChatGPT dan GitHub Copilot selama pengerjaan tugas ini. ChatGPT
 ### AI Disclosure
 
 Saya menggunakan ChatGPT dan GitHub Copilot selama pengerjaan Tugas 3. ChatGPT membantu saya memahami requirement tugas dan menjelaskan konsep seperti ModelForm, CSRF token, serialization, dan deserialization. ChatGPT juga membantu saya mengecek dan memperbaiki bagian views.py, urls.py, serta template HTML, terutama saat membuat fitur Create, Update, Delete, dan JSON Data Delivery. GitHub Copilot saya gunakan untuk membantu menulis dan melengkapi beberapa bagian kode. Setelah mendapatkan bantuan dari AI, saya tetap menyesuaikan kode dengan struktur project saya dan mencoba memahami setiap perubahan yang dilakukan. Saya juga melakukan testing secara langsung menggunakan python manage.py runserver, termasuk mencoba menambah, mengubah, dan menghapus data Experience, membuka endpoint JSON, melakukan filtering berdasarkan judul Experience, serta memastikan data JSON dapat di-deserialize dan ditampilkan kembali di halaman Experience.
+
+### Tugas 4
+
+Pada Tugas 4, saya menambahkan fitur authentication, session, cookies, authorization, role Editor, dan fitur star pada website portfolio.
+
+1. Saya menggunakan sistem authentication bawaan Django untuk membuat fitur registrasi, login, dan logout. Pengguna yang belum login masih dapat melihat data portfolio, tetapi harus login untuk melakukan aksi yang membutuhkan akun. Saya juga menggunakan session untuk menyimpan status login dan cookie `last_login` untuk menyimpan waktu login terakhir.
+
+2. Saya menerapkan pembagian hak akses berdasarkan role. Pengguna biasa hanya dapat melihat data dan memberikan atau membatalkan star. Editor dapat melakukan hal yang sama dan juga dapat mengubah data, tetapi tidak dapat membuat atau menghapus data. Sementara itu, superuser dapat membuat, mengubah, dan menghapus data. Role Editor dibuat menggunakan Django Group/Permission.
+
+3. Pembatasan akses tidak hanya dilakukan pada template dengan menyembunyikan tombol yang tidak boleh digunakan, tetapi juga dilakukan pada view. Dengan begitu, pengguna yang tidak memiliki izin tetap tidak dapat menjalankan aksi tersebut meskipun mencoba mengakses URL secara langsung.
+
+4. Saya menambahkan fitur star yang hanya dapat digunakan oleh pengguna yang sudah login. Fitur ini menggunakan `ManyToManyField` dengan model User sehingga satu pengguna tidak dapat memberikan lebih dari satu star pada data yang sama. Pengguna juga dapat membatalkan star dan melihat jumlah total star serta status star mereka. Proses star menggunakan method `POST` dan dilindungi dengan `{% csrf_token %}`.
+
+5. Endpoint JSON dari Tugas 3 tetap dipertahankan dan dapat digunakan tanpa menampilkan informasi sensitif. Saya juga memastikan project dapat dijalankan menggunakan `python manage.py runserver` dan melakukan testing pada fitur login, logout, pembagian role, CRUD, star, dan endpoint JSON.
+
+### AI Disclosure
+
+Pada Tugas 4, saya menggunakan ChatGPT dan GitHub Copilot sebagai bantuan selama proses pengerjaan. ChatGPT saya gunakan untuk memahami konsep authentication, session, cookies, authorization, Django Group/Permission, dan `ManyToManyField`, serta membantu ketika saya menemukan error pada kode.
+
+Saya biasanya memberikan potongan kode atau error yang saya temui, kemudian meminta penjelasan mengenai penyebabnya dan bagian yang perlu diperbaiki. ChatGPT juga membantu saya saat mengerjakan bagian `models.py`, `views.py`, `urls.py`, dan template untuk fitur login, role Editor, pembatasan akses, dan star.
+
+GitHub Copilot saya gunakan untuk memberikan saran dan melengkapi beberapa bagian kode. Namun, kode dari AI tidak langsung saya gunakan. Saya tetap menyesuaikannya dengan struktur project yang saya buat dan mengecek kembali apakah hasilnya sudah sesuai dengan requirement tugas.
+
+Setelah melakukan perubahan, saya menjalankan project dan mencoba fitur-fiturnya secara langsung. Beberapa saran dari AI juga perlu saya ubah karena tidak selalu sesuai dengan struktur kode yang saya gunakan. Jadi, AI saya gunakan sebagai bantuan untuk memahami konsep, mencari solusi saat menemukan masalah, dan membantu proses coding, sedangkan implementasi dan testing akhirnya saya lakukan sendiri.

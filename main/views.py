@@ -10,6 +10,9 @@ import datetime
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 
+def is_editor(user):
+    return user.groups.filter(name="Editor").exists()
+    
 # Create your views here.
 def show_main(request):
     last_login = request.COOKIES.get('last_login', 'Belum ada sesi login / Cookie tidak ditemukan')
@@ -64,6 +67,7 @@ def show_experience(request):
         "name": "Keisha Janice Maulina Napitupulu",
         "experience_list": experiences,
         "title_query": title_query,
+        "is_editor": is_editor(request.user),
     }
     return render(request, "experience.html", context)
 
@@ -104,7 +108,7 @@ def create_experience(request):
 
 @login_required(login_url="/login/")
 def create_skill(request):
-    if not request.user.is_superuser:
+    if not request.user.is_superuser :
         raise PermissionDenied
     form = SkillForm(request.POST or None)
 
@@ -149,7 +153,7 @@ def delete_skill(request, id):
 
 @login_required(login_url="/login/")
 def update_experience(request, id):
-    if not request.user.is_superuser:
+    if not request.user.is_superuser and not is_editor(request.user):
         raise PermissionDenied
     experience = get_object_or_404(Experience, pk=id)
     form = ExperienceForm(request.POST or None, instance=experience)
@@ -224,4 +228,4 @@ def toggle_star_skill(request, id):
         else:
             skill.starred_by.add(request.user)
     return redirect("main:show_skill")
-
+

@@ -1,4 +1,6 @@
 from django.forms import ModelForm, TextInput, Textarea, URLInput, Select
+from django.core.exceptions import ValidationError
+from django.utils.html import strip_tags
 from main.models import Experience, Skill
 
 class ExperienceForm(ModelForm):
@@ -45,6 +47,18 @@ class ExperienceForm(ModelForm):
             ),
         }
 
+    def clean_title(self):
+        title = strip_tags(self.cleaned_data["title"]).strip()
+        if not title:
+            raise ValidationError("Title tidak boleh hanya berisi tag HTML.")
+        return title
+
+    def clean_organization(self):
+        return strip_tags(self.cleaned_data["organization"]).strip()
+
+    def clean_description(self):
+        return strip_tags(self.cleaned_data["description"]).strip()
+
 
 class SkillForm(ModelForm):
     class Meta:
@@ -77,3 +91,15 @@ class SkillForm(ModelForm):
                 }
             ),
         }
+
+    def clean_name(self):
+        name = strip_tags(self.cleaned_data["name"]).strip()
+        if not name:
+            raise ValidationError("Nama skill tidak boleh hanya berisi tag HTML.")
+        return name
+
+    def clean_description(self):
+        return strip_tags(self.cleaned_data["description"]).strip()
+
+    def clean_level(self):
+        return strip_tags(self.cleaned_data["level"]).strip()

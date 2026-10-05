@@ -138,21 +138,34 @@ function buildSkillCardElement(item) {
 
             <div class="project-actions"
                  style="margin-top: 1rem; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <form method="post"
-                      action="${escapeHtml(starUrl)}"
-                      class="star-form"
-                      style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit"
-                            class="button button-star${isStarredClass}"
-                            title="${starTitle}">
+                {% if user.is_authenticated %}
+                    <form method="post"
+                        action="${escapeHtml(starUrl)}"
+                        class="star-form"
+                        style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="button button-star${isStarredClass}"
+                                title="${starTitle}">
+                            <span aria-hidden="true">★</span>
+                            ${starText}
+                            <span class="star-count">
+                                ${escapeHtml(skill.star_count)}
+                            </span>
+                        </button>
+                    </form>
+                {% else %}
+                    <span class="button button-secondary" title="${starTitle}">
                         <span aria-hidden="true">★</span>
-                        ${starText}
-                        <span class="star-count">
-                            ${escapeHtml(skill.star_count)}
-                        </span>
-                    </button>
-                </form>
+                        ${escapeHtml(skill.star_count)}
+                        <span>star</span>
+                    </span>
+
+                    <a href="{% url 'main:login' %}"
+                    class="button button-secondary">
+                        Login untuk star
+                    </a>
+                {% endif %}
 
                 ${editHtml}
                 ${deleteHtml}

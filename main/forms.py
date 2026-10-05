@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.html import strip_tags
 from main.models import Experience, Skill
 
+
 class ExperienceForm(ModelForm):
     class Meta:
         model = Experience
@@ -54,10 +55,20 @@ class ExperienceForm(ModelForm):
         return title
 
     def clean_organization(self):
-        return strip_tags(self.cleaned_data["organization"]).strip()
+        organization = strip_tags(self.cleaned_data["organization"]).strip()
+        if not organization:
+            raise ValidationError(
+                "Organization tidak boleh kosong atau hanya berisi tag HTML."
+            )
+        return organization
 
     def clean_description(self):
-        return strip_tags(self.cleaned_data["description"]).strip()
+        description = strip_tags(self.cleaned_data["description"]).strip()
+        if not description:
+            raise ValidationError(
+                "Description tidak boleh kosong atau hanya berisi tag HTML."
+            )
+        return description
 
 
 class SkillForm(ModelForm):
@@ -99,7 +110,17 @@ class SkillForm(ModelForm):
         return name
 
     def clean_description(self):
-        return strip_tags(self.cleaned_data["description"]).strip()
+        description = strip_tags(self.cleaned_data["description"]).strip()
+        if not description:
+            raise ValidationError(
+                "Description tidak boleh kosong atau hanya berisi tag HTML."
+            )
+        return description
 
     def clean_level(self):
-        return strip_tags(self.cleaned_data["level"]).strip()
+        level = strip_tags(self.cleaned_data["level"]).strip()
+        if not level:
+            raise ValidationError(
+                "Level tidak boleh kosong atau hanya berisi tag HTML."
+            )
+        return level

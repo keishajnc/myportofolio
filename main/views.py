@@ -135,6 +135,7 @@ def show_skill(request):
     context = {
         "name": "Keisha Janice Maulina Napitupulu",
         "name_query": name_query,
+        "is_editor": is_editor(request.user),
         "form": SkillForm(),
     }
 
@@ -306,6 +307,30 @@ def update_experience(request, id):
 
     return render(request, "experience_form.html", context)
 
+@login_required(login_url="/login/")
+def update_skill(request, id):
+    if not request.user.is_superuser and not is_editor(request.user):
+        raise PermissionDenied
+
+    skill = get_object_or_404(Skill, pk=id)
+
+    form = SkillForm(
+        request.POST if request.method == "POST" else None,
+        instance=skill,
+    )
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Skill berhasil diperbarui!")
+        return redirect("main:show_skill")
+
+    context = {
+        "name": "Keisha Janice Maulina Napitupulu",
+        "form": form,
+        "is_edit": True,
+    }
+
+    return render(request, "skill_form.html", context)
 
 def register(request):
     form = UserCreationForm(request.POST or None)

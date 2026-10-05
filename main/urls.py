@@ -5,7 +5,7 @@ from main.views import (
     create_experience, create_skill,
     get_experiences_json, get_skills_json,
     delete_experience, delete_skill,
-    update_experience,
+    update_experience, update_skill, 
     register, login_user, logout_user,
     toggle_star_experience, toggle_star_skill,
     create_experience_ajax, create_skill_ajax
@@ -27,6 +27,7 @@ urlpatterns = [
     path("skills/", show_skill, name="show_skill"),
     path("skills/add/", create_skill, name="create_skill"),
     path("skills/add-ajax/", create_skill_ajax, name="create_skill_ajax"),
+    path("skills/<uuid:id>/edit/", update_skill, name="update_skill"),
     path("api/skills/", get_skills_json, name="get_skills_json"),
     path("skills/<uuid:id>/delete/", delete_skill, name="delete_skill"),
     path("experience/<uuid:id>/star/", toggle_star_experience, name="toggle_star_experience"),

@@ -127,35 +127,59 @@ function buildSkillCardElement(item) {
 }
 
 async function fetchSkills(searchQuery = "") {
-    if (skillsAbortController) skillsAbortController.abort();
-    skillsAbortController = new AbortController();
+    if (skillsAbortController) {
+        skillsAbortController.abort();
+    }
+
+    const controller = new AbortController();
+    skillsAbortController = controller;
+
+    displayPageSection({ showLoading: true });
 
     try {
-        displayPageSection({ showLoading: true });
-        
-        const url = searchQuery ? `${BASE_SKILLS_ENDPOINT}?name=${encodeURIComponent(searchQuery)}` : BASE_SKILLS_ENDPOINT;
-        
+        const url = searchQuery
+            ? `${BASE_SKILLS_ENDPOINT}?name=${encodeURIComponent(searchQuery)}`
+            : BASE_SKILLS_ENDPOINT;
+
         const response = await fetch(url, {
-            headers: { 'Accept': 'application/json' },
-            signal: skillsAbortController.signal,
+            headers: { "Accept": "application/json" },
+            signal: controller.signal,
         });
 
-        if (!response.ok) throw new Error('Failed to fetch data');
+        if (!response.ok) {
+            throw new Error(`Gagal memuat skill: ${response.status}`);
+        }
 
         const skillData = await response.json();
-        
+
+        // Abaikan hasil jika pengguna sudah memulai pencarian baru.
+        if (controller.signal.aborted) {
+            return;
+        }
+
+        if (!Array.isArray(skillData)) {
+            throw new Error("Format data skill tidak sesuai.");
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        skillData.forEach((item) => {
+            fragment.appendChild(buildSkillCardElement(item));
+        });
+
+        gridContainer.replaceChildren(fragment);
+
         if (skillData.length === 0) {
             displayPageSection({ showEmpty: true });
         } else {
-            gridContainer.innerHTML = '';
-            skillData.forEach(item => {
-                gridContainer.appendChild(buildSkillCardElement(item));
-            });
             displayPageSection({ showGrid: true });
         }
     } catch (error) {
-        if (error.name === 'AbortError') return;
-        console.error('Error loading skills:', error);
+        if (controller.signal.aborted || error.name === "AbortError") {
+            return;
+        }
+
+        console.error("Error loading skills:", error);
         displayPageSection({ showError: true });
     }
 }

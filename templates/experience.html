@@ -136,35 +136,58 @@ function buildExperienceCardElement(item) {
 }
 
 async function fetchExperiences(searchQuery = "") {
-    if (experiencesAbortController) experiencesAbortController.abort();
-    experiencesAbortController = new AbortController();
+    if (experiencesAbortController) {
+        experiencesAbortController.abort();
+    }
+
+    const controller = new AbortController();
+    experiencesAbortController = controller;
+
+    displayPageSection({ showLoading: true });
 
     try {
-        displayPageSection({ showLoading: true });
-        
-        const url = searchQuery ? `${BASE_EXPERIENCES_ENDPOINT}?title=${encodeURIComponent(searchQuery)}` : BASE_EXPERIENCES_ENDPOINT;
-        
+        const url = searchQuery
+            ? `${BASE_EXPERIENCES_ENDPOINT}?title=${encodeURIComponent(searchQuery)}`
+            : BASE_EXPERIENCES_ENDPOINT;
+
         const response = await fetch(url, {
-            headers: { 'Accept': 'application/json' },
-            signal: experiencesAbortController.signal,
+            headers: { "Accept": "application/json" },
+            signal: controller.signal,
         });
 
-        if (!response.ok) throw new Error('Failed to fetch data');
+        if (!response.ok) {
+            throw new Error(`Gagal memuat experience: ${response.status}`);
+        }
 
         const experienceData = await response.json();
-        
+
+        if (controller.signal.aborted) {
+            return;
+        }
+
+        if (!Array.isArray(experienceData)) {
+            throw new Error("Format data experience tidak sesuai.");
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        experienceData.forEach((item) => {
+            fragment.appendChild(buildExperienceCardElement(item));
+        });
+
+        gridContainer.replaceChildren(fragment);
+
         if (experienceData.length === 0) {
             displayPageSection({ showEmpty: true });
         } else {
-            gridContainer.innerHTML = '';
-            experienceData.forEach(item => {
-                gridContainer.appendChild(buildExperienceCardElement(item));
-            });
             displayPageSection({ showGrid: true });
         }
     } catch (error) {
-        if (error.name === 'AbortError') return;
-        console.error('Error loading experiences:', error);
+        if (controller.signal.aborted || error.name === "AbortError") {
+            return;
+        }
+
+        console.error("Error loading experiences:", error);
         displayPageSection({ showError: true });
     }
 }

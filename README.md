@@ -63,3 +63,41 @@ Saya biasanya memberikan potongan kode atau error yang saya temui, kemudian memi
 GitHub Copilot saya gunakan untuk memberikan saran dan melengkapi beberapa bagian kode. Namun, kode dari AI tidak langsung saya gunakan. Saya tetap menyesuaikannya dengan struktur project yang saya buat dan mengecek kembali apakah hasilnya sudah sesuai dengan requirement tugas.
 
 Setelah melakukan perubahan, saya menjalankan project dan mencoba fitur-fiturnya secara langsung. Beberapa saran dari AI juga perlu saya ubah karena tidak selalu sesuai dengan struktur kode yang saya gunakan. Jadi, AI saya gunakan sebagai bantuan untuk memahami konsep, mencari solusi saat menemukan masalah, dan membantu proses coding, sedangkan implementasi dan testing akhirnya saya lakukan sendiri.
+
+### Tugas 5
+
+Pada Tugas 5, saya menerapkan AJAX pada halaman Experience dan Skills untuk memuat data, melakukan pencarian, dan menambahkan data melalui modal tanpa me-reload halaman.
+
+1. Debouncing adalah teknik untuk menunda pemanggilan fungsi sampai pengguna berhenti melakukan aktivitas selama waktu tertentu. Pada pencarian, saya menggunakan jeda 300 milidetik setelah pengguna berhenti mengetik. Jika pengguna mengetik lagi, timer sebelumnya dibatalkan. Teknik ini mengurangi request yang tidak diperlukan karena pencarian tidak dijalankan untuk setiap karakter.
+
+2. `await` digunakan untuk menunggu Promise selesai sebelum menjalankan baris berikutnya dalam fungsi async. `await fetch()` menghasilkan objek Response, sedangkan `await response.json()` menghasilkan data JSON yang sudah dibaca. Tanpa `await`, hasilnya masih berupa Promise sehingga tidak bisa langsung diperlakukan sebagai Response atau data JSON. Promise juga dapat ditangani menggunakan `.then()`.
+
+3. XSS adalah serangan yang menyisipkan kode berbahaya agar dijalankan oleh browser pengguna. Django melakukan autoescaping pada template secara default, sedangkan data JSON yang dimasukkan melalui `innerHTML` harus di-escape sendiri. Saya menggunakan `escapeHtml()` untuk teks pada kartu dan `textContent` untuk pesan toast. Di sisi server, `strip_tags()` membersihkan tag HTML melalui method `clean_<field>` pada ModelForm, kemudian field wajib yang menjadi kosong ditolak.
+
+#### Implementasi
+
+- Halaman daftar merender kerangka, lalu mengambil data menggunakan `fetch()`. JSON disusun secara manual dengan `JsonResponse`, termasuk jumlah star dan status star pengguna.
+- Halaman menyediakan kondisi loading, data kosong, dan error. Pencarian menggunakan debounce 300 milidetik serta pembatalan request sebelumnya dengan `AbortController`.
+- Form tambah data berada dalam modal dan dikirim menggunakan `FormData` beserta token CSRF. Server memvalidasi input menggunakan ModelForm dan mengembalikan status 201, 400, atau 403.
+- Setelah data ditambahkan, daftar diperbarui melalui AJAX. Toast menampilkan keberhasilan atau pesan kesalahan dari server.
+- Hak akses tetap diperiksa di view. Editor dan superuser dapat mengedit data, sedangkan penambahan dan penghapusan hanya dapat dilakukan oleh superuser.
+- Pengunjung dapat melihat jumlah star. Aksi Star/Unstar membutuhkan login.
+
+#### Pengujian
+
+Pengecekan Django dan tes otomatis dijalankan dengan:
+
+```powershell
+python manage.py check
+python manage.py test main
+```
+
+Tes mencakup akses halaman, endpoint JSON, pencarian, validasi input, sanitasi HTML, hak akses, CSRF, edit Skill, dan fitur star.
+
+Pengujian browser mencakup loading, pencarian, modal, toast, serta tampilan untuk setiap peran. Kondisi error diperiksa menggunakan mode Offline pada DevTools. Perlindungan XSS diperiksa dengan input `<img src="x" onerror="alert('XSS!')">`, yang harus ditolak pada field wajib setelah sanitasi dan tidak boleh memunculkan alert.
+
+#### AI Disclosure
+
+Dalam pengerjaan Tugas 5, saya menggunakan ChatGPT untuk berdiskusi mengenai penerapan AJAX dan membantu meninjau beberapa bagian kode. Pembahasan mencakup validasi form, respons JSON, pencarian dengan debounce, hak akses, pengujian, dan dokumentasi. Saya memberikan potongan kode atau pesan error sebagai konteks untuk mendapatkan penjelasan dan saran perbaikan.
+
+Penjelasan dan saran kode tersebut saya sesuaikan dengan struktur proyek sebelum diterapkan. Beberapa saran memerlukan penyesuaian karena tidak langsung sesuai dengan implementasi yang sudah ada. Perubahan dilakukan secara bertahap dan dicatat melalui commit yang menjelaskan masing-masing perubahan.

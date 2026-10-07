@@ -1,0 +1,23 @@
+<tr id="contact-{{ contact.id }}">
+    <td>{{ contact.name }}</td>
+    <td>{{ contact.email }}</td>
+    <td>{{ contact.phone|default_if_none:"" }}</td>
+    <td>
+        <button hx-get="{% url 'contacts:contact_edit' contact.id %}"
+                hx-target="closest tr"
+                hx-swap="outerHTML">
+            Edit
+        </button>
+        <button hx-delete="{% url 'contacts:contact_delete' contact.id %}"
+                hx-target="closest tr"
+                hx-swap="outerHTML"
+                hx-confirm="Yakin hapus {{ contact.name }}?">
+            Hapus
+        </button>
+    </td>
+</tr>
+{% if show_feedback %}
+<div id="feedback" hx-swap-oob="true">
+    <p>Kontak berhasil ditambahkan!</p>
+</div>
+{% endif %}
